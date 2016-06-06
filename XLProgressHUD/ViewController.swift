@@ -11,7 +11,6 @@ import UIKit
 class ViewController: UIViewController {
 
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,41 +18,43 @@ class ViewController: UIViewController {
         // 
     }
     
-    
+    // 提示显示在视图顶部
     @IBAction func click(sender: AnyObject) {
         
-        let title = "加载中..."
+        let title = "修改成功"
         
         view.showMessage(title, interval: 1.0, position: "top")
         
     }
     
-    
+    // 提示显示在视图中部
     @IBAction func centerClick(sender: AnyObject) {
         
         
-        let title = "付款成功"
-        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 2.0, position: "center")
+        let title = "修改成功"
+        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 1.0, position: "center")
         
     }
     
+    // 提示显示在视图底部
     @IBAction func bottomClick(sender: AnyObject) {
         
-        let title = "zhe is cut eatting fish... in work in worlkkkii inf"
-        view.showTitleMessageAndImage("+134", message: title, image: UIImage(named: "true_icon"), interval: 3.0, position: "bottom")
+        let title = "恭喜你！\n答对了"
+        view.showTitleMessageAndImage("+2", message: title, image: UIImage(named: "coins_big_icon"), interval: 1.0, position: "bottom")
         
     }
     
+    // 网络数据请求中
     @IBAction func activityClick(sender: AnyObject) {
         
-        let title = "请求数据中..."
+        let title = "加载中..."
         view.showLoadingTilteActivity(title, position: "center")
-//        view.showLoadingActivity("bottom")
         
+        // 模拟网络数据加载设置的显示时间
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) { () -> Void in
             
-            print("------")
+            // 隐藏提示视图
             self.view.hideActivity()
         }
         
