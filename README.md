@@ -10,7 +10,7 @@ CocoaPods is a dependency manager for Cocoa projects. You can install it with th
 
         $ gem install cocoapods
         
-To integrate Alamofire into your Xcode project using CocoaPods, specify it in your 'Podfile' :
+To integrate XLProgressHUD into your Xcode project using CocoaPods, specify it in your 'Podfile' :
 
         source 'https://github.com/CocoaPods/Specs.git'
         platform :ios, '8.0'
