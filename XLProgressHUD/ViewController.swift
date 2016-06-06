@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
         let title = "修改成功"
         
-        view.showMessage(title, interval: 1.0, position: "top")
+        view.showMessage(title, interval: 0.2, position: "top")
         
     }
     
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         
         
         let title = "修改成功"
-        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 1.0, position: "center")
+        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 0.2, position: "center")
         
     }
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     @IBAction func bottomClick(sender: AnyObject) {
         
         let title = "恭喜你！\n答对了"
-        view.showTitleMessageAndImage("+2", message: title, image: UIImage(named: "coins_big_icon"), interval: 1.0, position: "bottom")
+        view.showTitleMessageAndImage("+2", message: title, image: UIImage(named: "coins_big_icon"), interval: 0.2, position: "bottom")
         
     }
     
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         view.showLoadingTilteActivity(title, position: "center")
         
         // 模拟网络数据加载设置的显示时间
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) { () -> Void in
             
             // 隐藏提示视图
