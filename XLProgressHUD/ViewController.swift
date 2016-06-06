@@ -21,9 +21,8 @@ class ViewController: UIViewController {
     // 提示显示在视图顶部
     @IBAction func click(sender: AnyObject) {
         
-        let title = "修改成功"
-        
-        view.showMessage(title, interval: 0.2, position: "top")
+        let message = "修改成功"
+        view.showMessage(message, interval: 0.2, position: "top")
         
     }
     
@@ -31,24 +30,25 @@ class ViewController: UIViewController {
     @IBAction func centerClick(sender: AnyObject) {
         
         
-        let title = "修改成功"
-        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 0.2, position: "center")
+        let message = "修改成功"
+        view.showMessageAndImage(message, image: UIImage(named: "true_icon"), interval: 0.2, position: "center")
         
     }
     
     // 提示显示在视图底部
     @IBAction func bottomClick(sender: AnyObject) {
         
-        let title = "恭喜你！\n答对了"
-        view.showTitleMessageAndImage("+2", message: title, image: UIImage(named: "coins_big_icon"), interval: 0.2, position: "bottom")
+        let title = "+2"
+        let message = "恭喜你！\n答对了"
+        view.showTitleMessageAndImage(title, message: message, image: UIImage(named: "coins_big_icon"), interval: 0.2, position: "bottom")
         
     }
     
     // 网络数据请求中
     @IBAction func activityClick(sender: AnyObject) {
         
-        let title = "加载中..."
-        view.showLoadingTilteActivity(title, position: "center")
+        let message = "加载中..."
+        view.showLoadingTilteActivity(message, position: "center")
         
         // 模拟网络数据加载设置的显示时间
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
