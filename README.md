@@ -17,7 +17,7 @@ To integrate Alamofire into your Xcode project using CocoaPods, specify it in yo
         use_frameworks!
         
         target '<Your Target Name>' do
-            pod 'XLProgressHUD', '~> 1.0.4'
+            pod 'XLProgressHUD', '~> 1.0.5'
         end
         
 Then, run the following command:
