@@ -1,5 +1,5 @@
 XLProgressHUD
 ======
-功能演示
+Function demonstration
 -----
 ![](https://github.com/williamxiaolong/XLProgressHUD/blob/master/DemonstrationImages/demonstrated-icon.gif)
