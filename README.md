@@ -33,20 +33,21 @@ Usage
 #### Use Code
 1、单独内容信息提示
 
-        let title = "修改成功"
-        view.showMessage(title, interval: 0.2, position: "top")
+        let message = "修改成功"
+        view.showMessage(message, interval: 0.2, position: "top")
 2、内容信息 ＋ 图片 提示
 
-        let title = "修改成功"
-        view.showMessageAndImage(title, image: UIImage(named: "true_icon"), interval: 0.2, position: "center")
+        let message = "修改成功"
+        view.showMessageAndImage(message, image: UIImage(named: "true_icon"), interval: 0.2, position: "center")
 3、标题信息 ＋ 内容信息 ＋ 图片 提示
 
-        let title = "恭喜你！\n答对了"
-        view.showTitleMessageAndImage("+2", message: title, image: UIImage(named: "coins_big_icon"), interval: 0.2, position: "bottom")
+        let title = "+2"
+        let message = "恭喜你！\n答对了"
+        view.showTitleMessageAndImage(title, message: message, image: UIImage(named: "coins_big_icon"), interval: 0.2, position: "bottom")
 4、网络请求持久显示提示
 
-        let title = "加载中..."
-        view.showLoadingTilteActivity(title, position: "center")
+        let message = "加载中..."
+        view.showLoadingTilteActivity(message, position: "center")
         // 模拟网络数据加载设置的显示时间
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) { () -> Void in
