@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
 
   s.name         = "XLProgressHUD"
-  s.version      = "1.0.2"
+  s.version      = "1.0.5"
   s.summary      = "XLProgressHUD A short description of"
   s.license      = "MIT"
 
