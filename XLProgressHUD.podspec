@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
 
   s.name         = "XLProgressHUD"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "XLProgressHUD A short description of"
   s.license      = "MIT"
 
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   # s.tvos.deployment_target = "9.0"
 
 
-  s.source       = { :git => "https://github.com/williamxiaolong/XLProgressHUD.git"}
+  s.source       = { :git => "https://github.com/williamxiaolong/XLProgressHUD.git", :tag => s.version}
 
 
   s.source_files  = 'Source/*.swift'
