@@ -22,10 +22,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZo-1n-zrE">
-                                <rect key="frame" x="137" y="60" width="100" height="30"/>
+                                <rect key="frame" x="149.5" y="60" width="75" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="MaP-8e-O5t"/>
-                                    <constraint firstAttribute="width" constant="100" id="TcX-eB-Ox5"/>
                                 </constraints>
                                 <state key="normal" title="top display"/>
                                 <connections>
@@ -33,10 +32,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qrn-2w-r3D">
-                                <rect key="frame" x="137" y="128" width="100" height="30"/>
+                                <rect key="frame" x="138.5" y="128" width="97" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Ck8-AC-sBv"/>
-                                    <constraint firstAttribute="width" constant="100" id="OpL-HW-rn1"/>
                                 </constraints>
                                 <state key="normal" title="center display"/>
                                 <connections>
@@ -44,9 +42,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="scV-F4-vzD">
-                                <rect key="frame" x="127" y="185" width="120" height="30"/>
+                                <rect key="frame" x="136" y="185" width="102" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="yrq-9b-sza"/>
                                     <constraint firstAttribute="height" constant="30" id="zmM-hI-ngl"/>
                                 </constraints>
                                 <state key="normal" title="bottom display"/>
@@ -55,9 +52,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="42s-D1-oTb">
-                                <rect key="frame" x="137" y="257" width="100" height="30"/>
+                                <rect key="frame" x="161.5" y="257" width="51" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="rYI-OV-k80"/>
                                     <constraint firstAttribute="height" constant="30" id="vkP-jb-0VB"/>
                                 </constraints>
                                 <state key="normal" title="loading"/>

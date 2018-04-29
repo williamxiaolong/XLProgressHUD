@@ -69,68 +69,59 @@ class XLHUDConfig {
 fileprivate let activityViewTag     = 1214
 
 extension UIView{
-    
+    //MARK:- Public
     // 只含有提示信息的提示
-    public func showMessage(message:String?,interval:CGFloat,position: XLHUDConfigType){
+    public func showMessage(_ message: String?, interval: CGFloat = 1.68, position: XLHUDConfigType = .center){
         if let view = viewForMessage(title: nil, message: message, image: nil) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
     }
-    
-    public func showMessage(message:String?,interval:CGFloat,position: CGPoint){
-        
+    public func showMessage(_ message: String?, interval: CGFloat, position: CGPoint){
         if let view = viewForMessage(title: nil, message: message, image: nil) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
-        
     }
     
     // 含有提示信息和图片的提示
-    public func showMessageAndImage(message:String?,image:UIImage?,interval:CGFloat,position: XLHUDConfigType ){
+    public func showMessageAndImage(_ message: String?, image: UIImage?, interval: CGFloat = 1.68, position: XLHUDConfigType = .center ){
         if let view = viewForMessage(title: nil, message: message, image: image) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
     }
-    public func showMessageAndImage(message:String?,image:UIImage?,interval:CGFloat,position: CGPoint ){
-        
+    public func showMessageAndImage(_ message: String?, image: UIImage?, interval: CGFloat, position: CGPoint ){
         if let view = viewForMessage(title: nil, message: message, image: image) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
     }
     
     // 含有标题、信息和图片的提示
-    public func showTitleMessageAndImage(title:String?,message:String?,image:UIImage?,interval:CGFloat,position:XLHUDConfigType){
-        
+    public func showTitleMessageAndImage(_ title: String?, message: String?, image: UIImage?, interval: CGFloat = 1.68,position: XLHUDConfigType = .center) {
         if let view = viewForMessage(title: title, message: message, image: image) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
-        
     }
     
-    public func showTitleMessageAndImage(title:String?,message:String?,image:UIImage?,interval:CGFloat,position:CGPoint){
-        
+    public func showTitleMessageAndImage(_ title: String?, message: String?, image: UIImage?, interval: CGFloat, position: CGPoint) {
         if let view = viewForMessage(title: title, message: message, image: image) {
-            
             showView(view: view, interval: interval, point: position as AnyObject)
         }
         
     }
     
     // 含有提示信息的加载提示
-    public func showLoadingTilteActivity(message:String,position:AnyObject?){
-        
-        activityView(text: message, position: position)
-        
+    public func showLoadingTilteActivity(_ message: String, position: XLHUDConfigType = .center){
+        activityView(text: message, position: position as AnyObject)
+    }
+    public func showLoadingTilteActivity(_ message: String, position: CGPoint){
+        activityView(text: message, position: position as AnyObject)
     }
     
     // 没有提示信息的加载提示
-    public func showLoadingActivity(position:AnyObject?){
-        activityView(text: nil, position: position)
+    public func showLoadingActivity(_ position: XLHUDConfigType = .center){
+        activityView(text: nil, position: position as AnyObject)
+    }
+    public func showLoadingActivity(_ position: CGPoint){
+        activityView(text: nil, position: position as AnyObject)
     }
     
     // 隐藏提示
@@ -138,6 +129,7 @@ extension UIView{
         hideActivityView(interval)
     }
     
+    //MARK:- Private
     private func showView(view:UIView,interval:CGFloat,point:AnyObject) {
         showView(view: view, interval: interval, point: point, config: nil)
     }
@@ -161,10 +153,10 @@ extension UIView{
         }) { (finished) in
             
             UIView.animate(withDuration: m!.fadeDuration,
-                           delay: Double(interval),
-                           options: .curveEaseIn,
-                           animations: {
-                            view.alpha = 0.0
+                                  delay: Double(interval),
+                                options: .curveEaseIn,
+                             animations: {
+                view.alpha = 0.0
             }, completion: { (finished) in
                 view.removeFromSuperview()
                 self.isUserInteractionEnabled = true
@@ -190,9 +182,9 @@ extension UIView{
             let pointType = point as! XLHUDConfigType
             if pointType == .top {
                 
-                return CGPoint(x: bounds.size.width * 0.5, y: view.bounds.size.height * 0.5 + m!.verticalPadding)
+                return CGPoint(x: bounds.size.width * 0.5, y: m!.topMargin + view.bounds.size.height * 0.5)
             } else if pointType == .bottom {
-                return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height - view.bounds.size.height * 0.5 - m!.verticalPadding - 40)
+                return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height - view.bounds.size.height * 0.5 - m!.bottomMargin - 20)
             } else {
                 return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height * 0.5)
             }
@@ -348,7 +340,7 @@ extension UIView{
             messageLabel?.frame = CGRect(x: messageX, y: messageY, width: messageWidth, height: messageHeight)
             showView.addSubview(messageLabel!)
         }
-        
+        print(showView.frame)
         return showView
     }
     
@@ -421,7 +413,7 @@ extension UIView{
     }
     
     // 移除一直显示的View
-    private func hideActivityView(_ interval: Double = 0.2){
+    private func hideActivityView(_ interval: Double){
         
         if let existingActivityView = viewWithTag(activityViewTag) {
             UIView.animate(withDuration: interval,
