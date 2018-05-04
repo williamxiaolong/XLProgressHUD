@@ -8,156 +8,205 @@
 import UIKit
 import Foundation
 
-// 总体
-let proportionWidth:CGFloat     = 0.8     //80%的占比宽度
-let proportionHeight:CGFloat    = 0.8     //80%的占比高度
-let horizontalPadding:CGFloat   = 10.0
-let verticalPadding:CGFloat     = 10.0
-let cornerRadius:CGFloat        = 10.0
-let opacity:CGFloat             = 0.7
-let titleFontSize:CGFloat       = 16.0
-let messageFontSize:CGFloat     = 16.0
-let titleLines                  = 0
-let messageLines                = 0
-let fadeDuration:Double         = 0.2
+fileprivate let SCREEN = UIScreen.main.bounds.size
+fileprivate let SCREEN_W = SCREEN.width
+fileprivate let SCREEN_H = SCREEN.height
+fileprivate func iPhoneX() -> Bool {
+    return (SCREEN_W == 375.0 && SCREEN_H == 812.0)
+}
+/// 44/20
+fileprivate func StatusBarHeight() -> CGFloat {
+    return iPhoneX() ? 44.0 : 20.0
+}
+/// 34 / 0
+fileprivate func TabbarSafeBottomMargin() -> CGFloat {
+    return iPhoneX() ? 34.0 : 0.0
+}
 
-let defaultPosition             = "center"
+public enum XLHUDConfigType: Int {
+    case center
+    case top
+    case bottom
+}
 
+class XLHUDConfig {
+    // 总体
+    var proportionWidth: CGFloat     = 0.8     //80%的占比宽度
+    var proportionHeight: CGFloat    = 0.8     //80%的占比高度
+    var horizontalPadding: CGFloat   = 10.0
+    var verticalPadding: CGFloat     = 10.0
+    var topMargin: CGFloat           = StatusBarHeight()
+    var bottomMargin: CGFloat        = TabbarSafeBottomMargin()
+    var cornerRadius: CGFloat        = 10.0
+    var opacity: CGFloat             = 0.7
+    var titleFontSize: CGFloat       = 16.0
+    var messageFontSize: CGFloat     = 16.0
+    var titleLines                   = 0
+    var messageLines                 = 0
+    let fadeDuration: Double         = 0.2
 
-// 阴影
-let shadowOpacity:Float         = 0.8
-let shadowRadius:CGFloat        = 5.0
-let shadowOffset                = CGSize(width: CGFloat(4.0), height: CGFloat(4.0))
-var displayShadow               = true
+    var defaultType: XLHUDConfigType = .center
 
-// 图片
-let imageViewWidth:CGFloat      = 20.0
-let imageViewHeight:CGFloat     = 20.0
-let bigImageViewWidth:CGFloat   = 30.0
-let bigImageViewHeight:CGFloat  = 30.0
+    // 阴影
+    var shadowOpacity: Float         = 0.8
+    var shadowRadius: CGFloat        = 5.0
+    var shadowOffset                 = CGSize(width: 2, height: 2)
+    var displayShadow                = true
 
-// 一直显示的View
-let activityViewWidth:CGFloat   = 120
-let activityViewHeight:CGFloat  = 100
-let activityOpactity:CGFloat    = 0.7
-var activityViewKey             = "activityViewKey"
-let activityFontSize:CGFloat    = 14.0
+    // 图片
+    var imageViewWidth: CGFloat      = 20.0
+    var imageViewHeight: CGFloat     = 20.0
+    var bigImageViewWidth: CGFloat   = 30.0
+    var bigImageViewHeight: CGFloat  = 30.0
 
+    // 一直显示的View
+    var activityViewWidth: CGFloat   = 120
+    var activityViewHeight: CGFloat  = 100
+    var activityOpactity: CGFloat    = 0.7
+    var activityFontSize: CGFloat    = 14.0
+}
+
+fileprivate let activityViewTag     = 1214
 
 extension UIView{
-    
+    //MARK:- Public
     // 只含有提示信息的提示
-    public func showMessage(message:String?,interval:CGFloat,position:AnyObject){
-        
-        if let view = viewForMessage(nil, message: message, image: nil) {
-            
-            showView(view, interval: interval, point: position)
+    public func showMessage(_ message: String?, interval: CGFloat = 1.68, position: XLHUDConfigType = .center){
+        if let view = viewForMessage(title: nil, message: message, image: nil) {
+            showView(view: view, interval: interval, point: position as AnyObject)
         }
-        
+    }
+    public func showMessage(_ message: String?, interval: CGFloat, position: CGPoint){
+        if let view = viewForMessage(title: nil, message: message, image: nil) {
+            showView(view: view, interval: interval, point: position as AnyObject)
+        }
     }
     
-    
     // 含有提示信息和图片的提示
-    public func showMessageAndImage(message:String?,image:UIImage?,interval:CGFloat,position:AnyObject){
-        
-        if let view = viewForMessage(nil, message: message, image: image) {
-            
-            showView(view, interval: interval, point: position)
+    public func showMessageAndImage(_ message: String?, image: UIImage?, interval: CGFloat = 1.68, position: XLHUDConfigType = .center ){
+        if let view = viewForMessage(title: nil, message: message, image: image) {
+            showView(view: view, interval: interval, point: position as AnyObject)
         }
-        
-        
+    }
+    public func showMessageAndImage(_ message: String?, image: UIImage?, interval: CGFloat, position: CGPoint ){
+        if let view = viewForMessage(title: nil, message: message, image: image) {
+            showView(view: view, interval: interval, point: position as AnyObject)
+        }
     }
     
     // 含有标题、信息和图片的提示
-    public func showTitleMessageAndImage(title:String?,message:String?,image:UIImage?,interval:CGFloat,position:AnyObject){
-        
-        if let view = viewForMessage(title, message: message, image: image) {
-            
-            showView(view, interval: interval, point: position)
+    public func showTitleMessageAndImage(_ title: String?, message: String?, image: UIImage?, interval: CGFloat = 1.68,position: XLHUDConfigType = .center) {
+        if let view = viewForMessage(title: title, message: message, image: image) {
+            showView(view: view, interval: interval, point: position as AnyObject)
+        }
+    }
+    
+    public func showTitleMessageAndImage(_ title: String?, message: String?, image: UIImage?, interval: CGFloat, position: CGPoint) {
+        if let view = viewForMessage(title: title, message: message, image: image) {
+            showView(view: view, interval: interval, point: position as AnyObject)
         }
         
     }
     
     // 含有提示信息的加载提示
-    public func showLoadingTilteActivity(message:String,position:AnyObject?){
-        
-        activityView(message, position: position)
-        
+    public func showLoadingTilteActivity(_ message: String, position: XLHUDConfigType = .center){
+        activityView(text: message, position: position as AnyObject)
+    }
+    public func showLoadingTilteActivity(_ message: String, position: CGPoint){
+        activityView(text: message, position: position as AnyObject)
     }
     
     // 没有提示信息的加载提示
-    public func showLoadingActivity(position:AnyObject?){
-        
-        activityView(nil, position: position)
-        
+    public func showLoadingActivity(_ position: XLHUDConfigType = .center){
+        activityView(text: nil, position: position as AnyObject)
+    }
+    public func showLoadingActivity(_ position: CGPoint){
+        activityView(text: nil, position: position as AnyObject)
     }
     
     // 隐藏提示
-    public func hideActivity(){
-        
-        hideActivityView()
-        
+    public func hideActivity(_ interval: Double = 0.2){
+        hideActivityView(interval)
+    }
+    
+    //MARK:- Private
+    private func showView(view:UIView,interval:CGFloat,point:AnyObject) {
+        showView(view: view, interval: interval, point: point, config: nil)
     }
     
     // 控件显示（控件显示停留时间与动画）
-    private func showView(view:UIView,interval:CGFloat,point:AnyObject){
-        
-        view.center = centerPointForPositon(view, point: point)
+    private func showView(view:UIView,interval:CGFloat,point:AnyObject, config: XLHUDConfig?){
+        var m = config
+        if m == nil {
+           m = XLHUDConfig()
+        }
+        view.center = centerPointForPositon(view: view, point: point)
         view.alpha = 0.0
         addSubview(view)
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         
-        UIView.animateWithDuration(fadeDuration,
-                                   delay: 0.0,
-                                   options: UIViewAnimationOptions.CurveEaseOut,
-                                   animations: {
-                                     view.alpha = 1.0
-            }) { (finished) in
-                
-                UIView.animateWithDuration(fadeDuration,
-                                           delay: Double(interval),
-                                           options: UIViewAnimationOptions.CurveEaseIn,
-                                           animations: {
-                                            view.alpha = 0.0
-                    }, completion: { (finished) in
-                        view.removeFromSuperview()
-                        self.userInteractionEnabled = true
-                })
-                
+        UIView.animate(withDuration: m!.fadeDuration,
+                       delay: 0.0,
+                       options: .curveEaseOut,
+                       animations: {
+                        view.alpha = 1.0
+        }) { (finished) in
+            
+            UIView.animate(withDuration: m!.fadeDuration,
+                                  delay: Double(interval),
+                                options: .curveEaseIn,
+                             animations: {
+                view.alpha = 0.0
+            }, completion: { (finished) in
+                view.removeFromSuperview()
+                self.isUserInteractionEnabled = true
+            })
+            
         }
         
+    }
+    
+    private func centerPointForPositon(view:UIView,point:AnyObject?) -> CGPoint{
+        return centerPointForPositon(view: view, point: point, config: nil)
     }
     
     // 设置控件位置
-    private func centerPointForPositon(view:UIView,point:AnyObject?) -> CGPoint{
+    private func centerPointForPositon(view:UIView,point:AnyObject?, config: XLHUDConfig?) -> CGPoint{
+        var m = config
+        if m == nil {
+            m = XLHUDConfig()
+        }
         
-        if point is String {
+        if point is XLHUDConfigType {
             
-            let pointStr = point as! String
-            if pointStr == "top" {
+            let pointType = point as! XLHUDConfigType
+            if pointType == .top {
                 
-                return CGPoint(x: bounds.size.width * 0.5, y: view.bounds.size.height * 0.5 + verticalPadding)
-            }else if pointStr == "bottom" {
-                
-                return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height - view.bounds.size.height * 0.5 - verticalPadding - 40)
-                
-            }else{
-                
+                return CGPoint(x: bounds.size.width * 0.5, y: m!.topMargin + view.bounds.size.height * 0.5)
+            } else if pointType == .bottom {
+                return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height - view.bounds.size.height * 0.5 - m!.bottomMargin - 20)
+            } else {
                 return CGPoint(x: bounds.size.width * 0.5, y: bounds.size.height * 0.5)
             }
             
-        }else if point is NSValue{
-            
-            return point!.CGPointValue()
-        }else{
-            
-            return centerPointForPositon(view, point: defaultPosition)
+        } else if point is CGPoint{
+            return point as! CGPoint
+        } else {
+            return centerPointForPositon(view: view, point: m!.defaultType as AnyObject)
         }
         
     }
     
-    // 创建有时间间隔显示的控件
     private func viewForMessage(title:String?,message:String?,image:UIImage?) ->UIView?{
+        return viewForMessage(title: title, message: message, image: image, config: nil)
+    }
+    
+    // 创建有时间间隔显示的控件
+    private func viewForMessage(title:String?,message:String?,image:UIImage?, config: XLHUDConfig?) ->UIView?{
+        var m = config
+        if m == nil {
+            m = XLHUDConfig()
+        }
         
         if title == nil && message == nil && image == nil {
             return nil
@@ -167,21 +216,21 @@ extension UIView{
         var messageLabel:UILabel?
         var imageView:UIImageView?
         let showView = UIView()
-        showView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin,
-                                     UIViewAutoresizing.FlexibleRightMargin,
-                                     UIViewAutoresizing.FlexibleTopMargin,
-                                     UIViewAutoresizing.FlexibleBottomMargin]
-        showView.layer.cornerRadius = cornerRadius
+        showView.autoresizingMask = [UIViewAutoresizing.flexibleLeftMargin,
+                                     UIViewAutoresizing.flexibleRightMargin,
+                                     UIViewAutoresizing.flexibleTopMargin,
+                                     UIViewAutoresizing.flexibleBottomMargin]
+        showView.layer.cornerRadius = m!.cornerRadius
         
         // 阴影设置
-        if displayShadow {
-            showView.layer.shadowColor = UIColor.blackColor().CGColor
-            showView.layer.shadowOpacity = shadowOpacity
-            showView.layer.shadowRadius = shadowRadius
-            showView.layer.shadowOffset = shadowOffset
+        if m!.displayShadow {
+            showView.layer.shadowColor = UIColor.black.cgColor
+            showView.layer.shadowOpacity = m!.shadowOpacity
+            showView.layer.shadowRadius = m!.shadowRadius
+            showView.layer.shadowOffset = m!.shadowOffset
             
         }
-        showView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(opacity)
+        showView.backgroundColor = UIColor.black.withAlphaComponent(m!.opacity)
         
         var imageWidth:CGFloat = 0.0, imageHeight:CGFloat = 0.0, imageTop:CGFloat = 0.0
         
@@ -189,11 +238,11 @@ extension UIView{
         if image != nil {
             imageView = UIImageView()
             imageView?.image = image
-            imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-            imageView?.frame = CGRect(x: horizontalPadding, y: verticalPadding, width: imageViewWidth, height: imageViewHeight)
-            imageWidth = CGRectGetWidth((imageView?.bounds)!)
-            imageHeight = CGRectGetHeight((imageView?.bounds)!)
-            imageTop = verticalPadding
+            imageView?.contentMode = .scaleAspectFit
+            imageView?.frame = CGRect(x: m!.horizontalPadding, y: m!.verticalPadding, width: m!.imageViewWidth, height: m!.imageViewHeight)
+            imageWidth = imageView!.bounds.width
+            imageHeight = imageView!.bounds.height
+            imageTop = m!.verticalPadding
         }
         
         var titleWidth:CGFloat = 0.0, titleHeight:CGFloat = 0.0, titleTop:CGFloat = 0.0
@@ -202,22 +251,22 @@ extension UIView{
         if title != nil {
             
             titleLabel = UILabel()
-            titleLabel?.numberOfLines = titleLines
-            titleLabel?.font = UIFont.boldSystemFontOfSize(titleFontSize)
-            titleLabel?.textAlignment = NSTextAlignment.Left
-            titleLabel?.textColor = UIColor.whiteColor()
-            titleLabel?.backgroundColor = UIColor.clearColor()
+            titleLabel?.numberOfLines = m!.titleLines
+            titleLabel?.font = UIFont.boldSystemFont(ofSize: m!.titleFontSize)
+            titleLabel?.textAlignment = .left
+            titleLabel?.textColor = .white
+            titleLabel?.backgroundColor = .clear
             titleLabel?.alpha = 1.0
             titleLabel?.text = title
             
-            let maxTitleSize = CGSize(width: bounds.width * proportionWidth - imageWidth, height: bounds.height * proportionHeight)
+            let maxTitleSize = CGSize(width: bounds.width * m!.proportionWidth - imageWidth, height: bounds.height * m!.proportionHeight)
             let titleStr = title! as NSString
             
-            let expextesTitleSize = titleStr.boundingRectWithSize(maxTitleSize, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: (titleLabel?.font)!], context: nil)
+            let expextesTitleSize = titleStr.boundingRect(with: maxTitleSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: (titleLabel?.font)!], context: nil)
             titleLabel?.frame = CGRect(x: 0.0, y: 0.0, width: expextesTitleSize.width, height: expextesTitleSize.height)
-            titleWidth = CGRectGetWidth((titleLabel?.bounds)!)
-            titleHeight = CGRectGetHeight((titleLabel?.bounds)!)
-            titleTop = verticalPadding
+            titleWidth = titleLabel!.bounds.width
+            titleHeight = titleLabel!.bounds.height
+            titleTop = m!.verticalPadding
             
         }
         
@@ -225,19 +274,19 @@ extension UIView{
         if message != nil {
             
             messageLabel = UILabel()
-            messageLabel?.numberOfLines = messageLines
-            messageLabel?.font = UIFont.systemFontOfSize(messageFontSize)
-            messageLabel?.textAlignment = NSTextAlignment.Center
-            messageLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            messageLabel?.textColor = UIColor.whiteColor()
-            messageLabel?.backgroundColor = UIColor.clearColor()
+            messageLabel?.numberOfLines = m!.messageLines
+            messageLabel?.font = UIFont.systemFont(ofSize: m!.messageFontSize)
+            messageLabel?.textAlignment = .center
+            messageLabel?.lineBreakMode = .byWordWrapping
+            messageLabel?.textColor = .white
+            messageLabel?.backgroundColor = .clear
             messageLabel?.alpha = 1.0
             messageLabel?.text = message
             
-            let maxMessageSize = CGSize(width: bounds.width * proportionWidth - imageWidth, height: bounds.height * proportionHeight)
+            let maxMessageSize = CGSize(width: bounds.width * m!.proportionWidth - imageWidth, height: bounds.height * m!.proportionHeight)
             let messageStr = message! as NSString
             
-            let expextesMessageSize = messageStr.boundingRectWithSize(maxMessageSize, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: (messageLabel?.font)!], context: nil)
+            let expextesMessageSize = messageStr.boundingRect(with: maxMessageSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: (messageLabel?.font)!], context: nil)
             messageLabel?.frame = CGRect(x: 0.0, y: 0.0, width: expextesMessageSize.width, height: expextesMessageSize.height)
             
         }
@@ -245,23 +294,23 @@ extension UIView{
         var messageWidth:CGFloat = 0.0, messageHeight:CGFloat = 0.0, messageLeft:CGFloat = 0.0, messageTop:CGFloat = 0.0,messageX:CGFloat = 0.0,messageY:CGFloat = 0.0
         
         if title == nil && image != nil{
-            imageWidth = bigImageViewWidth
-            imageHeight = bigImageViewHeight
+            imageWidth = m!.bigImageViewWidth
+            imageHeight = m!.bigImageViewHeight
         }
         
         if messageLabel != nil {
             
-            messageWidth = CGRectGetWidth((messageLabel?.bounds)!)
-            messageHeight = CGRectGetHeight((messageLabel?.bounds)!)
-            messageX = horizontalPadding
-            messageY = imageTop + imageHeight + verticalPadding
+            messageWidth = messageLabel!.bounds.width
+            messageHeight = messageLabel!.bounds.height
+            messageX = m!.horizontalPadding
+            messageY = imageTop + imageHeight + m!.verticalPadding
             messageTop = messageY
-            messageLeft = messageLeft + horizontalPadding
+            messageLeft = messageLeft + m!.horizontalPadding
             
         }
         
-        let showWidth = max(imageWidth + titleWidth + horizontalPadding + 2 * horizontalPadding, messageWidth + 2 * horizontalPadding)
-        let showHeight = messageTop + messageHeight + verticalPadding
+        let showWidth = max(imageWidth + titleWidth + m!.horizontalPadding + 2 * m!.horizontalPadding, messageWidth + 2 * m!.horizontalPadding)
+        let showHeight = messageTop + messageHeight + m!.verticalPadding
         showView.frame = CGRect(x: 0.0, y: 0.0, width: showWidth, height: showHeight)
         
         var imageViewX:CGFloat = 0.0
@@ -270,117 +319,115 @@ extension UIView{
             imageViewX = (showWidth - imageWidth) * 0.5
             
         }else if image != nil{
-            imageViewX = (showWidth - imageWidth - titleWidth - horizontalPadding) * 0.5
+            imageViewX = (showWidth - imageWidth - titleWidth - m!.horizontalPadding) * 0.5
         }
         
         // 重新设置相应控件的frame
         if imageView != nil {
-            imageView?.frame = CGRect(x: imageViewX, y: verticalPadding, width: imageWidth, height: imageHeight)
+            imageView?.frame = CGRect(x: imageViewX, y: m!.verticalPadding, width: imageWidth, height: imageHeight)
             showView.addSubview(imageView!)
             
         }
         
         if titleLabel != nil {
-            let titleLabelX = imageViewX + imageWidth + horizontalPadding
+            let titleLabelX = imageViewX + imageWidth + m!.horizontalPadding
             titleLabel?.frame = CGRect(x: titleLabelX, y: titleTop, width: titleWidth, height: titleHeight)
             showView.addSubview(titleLabel!)
             
         }
         
         if messageLabel != nil {
-            
             messageLabel?.frame = CGRect(x: messageX, y: messageY, width: messageWidth, height: messageHeight)
             showView.addSubview(messageLabel!)
-            
         }
-        
+        print(showView.frame)
         return showView
     }
     
-    // 创建一直显示的View
     private func activityView(text:String?,position:AnyObject?){
+        activityView(text: text, position: position, config: nil)
+    }
+    
+    // 创建一直显示的View
+    private func activityView(text:String?,position:AnyObject?, config: XLHUDConfig?){
+        var m = config
+        if m == nil {
+            m = XLHUDConfig()
+        }
         
-        let existingActivityView = objc_getAssociatedObject(self, &activityViewKey)
+        let existingActivityView = viewWithTag(activityViewTag)
         if existingActivityView != nil {
             return
         }
         
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         
         let activityView = UIView()
-        activityView.frame = CGRect(x: 0.0, y: 0.0, width: activityViewWidth, height: activityViewHeight)
-        activityView.center = centerPointForPositon(activityView, point: position)
-        activityView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(activityOpactity)
+        activityView.frame = CGRect(x: 0.0, y: 0.0, width: m!.activityViewWidth, height: m!.activityViewHeight)
+        activityView.center = centerPointForPositon(view: activityView, point: position)
+        activityView.tag = activityViewTag
+        activityView.backgroundColor = UIColor.black.withAlphaComponent(m!.activityOpactity)
         activityView.alpha = 0.0
-        activityView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin,
-                                         UIViewAutoresizing.FlexibleRightMargin,
-                                         UIViewAutoresizing.FlexibleTopMargin,
-                                         UIViewAutoresizing.FlexibleBottomMargin]
-        activityView.layer.cornerRadius = cornerRadius
+        activityView.autoresizingMask = [UIViewAutoresizing.flexibleLeftMargin,
+                                         UIViewAutoresizing.flexibleRightMargin,
+                                         UIViewAutoresizing.flexibleTopMargin,
+                                         UIViewAutoresizing.flexibleBottomMargin]
+        activityView.layer.cornerRadius = m!.cornerRadius
         
-        if displayShadow {
-            activityView.layer.shadowColor = UIColor.blackColor().CGColor
-            activityView.layer.shadowOpacity = shadowOpacity
-            activityView.layer.shadowRadius = shadowRadius
-            activityView.layer.shadowOffset = shadowOffset
+        if m!.displayShadow {
+            activityView.layer.shadowColor = UIColor.black.cgColor
+            activityView.layer.shadowOpacity = m!.shadowOpacity
+            activityView.layer.shadowRadius = m!.shadowRadius
+            activityView.layer.shadowOffset = m!.shadowOffset
             
         }
         
-        var indicViewCenterY = CGRectGetHeight(activityView.bounds) * 0.5
+        var indicViewCenterY = activityView.bounds.height * 0.5
         
         if text != nil {
             
-            indicViewCenterY = CGRectGetHeight(activityView.bounds) * 0.5 - 10
+            indicViewCenterY = activityView.bounds.height * 0.5 - 10
             let label = UILabel()
-            label.frame = CGRect(x: 0.0, y: CGRectGetHeight(activityView.bounds) - 30, width: CGRectGetWidth(activityView.bounds), height: 20)
+            label.frame = CGRect(x: 0.0, y: activityView.bounds.height - 30, width: activityView.bounds.width, height: 20)
             label.text = text
-            label.textAlignment = NSTextAlignment.Center
-            label.textColor = UIColor.whiteColor()
-            label.font = UIFont.systemFontOfSize(activityFontSize)
+            label.textAlignment = .center
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: m!.activityFontSize)
             activityView.addSubview(label)
         }
         
-        let indicView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        let indicView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         indicView.center = CGPoint(x: activityView.bounds.size.width * 0.5, y: indicViewCenterY)
         activityView.addSubview(indicView)
         indicView.startAnimating()
         
-        objc_setAssociatedObject(self, &activityViewKey, activityView, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        
         addSubview(activityView)
         
-        UIView.animateWithDuration(fadeDuration, delay: 0.0,
-                                   options: UIViewAnimationOptions.CurveEaseOut,
-                                   animations: { 
-                                    activityView.alpha = 1.0
-            },
-                                   completion: nil)
+        UIView.animate(withDuration: m!.fadeDuration,
+                       delay: 0.0,
+                       options: .curveEaseOut,
+                       animations: {
+                        activityView.alpha = 1.0 },
+                       completion: nil)
         
     }
     
     // 移除一直显示的View
-    private func hideActivityView(){
+    private func hideActivityView(_ interval: Double){
         
-        let existingActivityView = objc_getAssociatedObject(self, &activityViewKey)
-        if existingActivityView != nil {
-            
-            UIView.animateWithDuration(fadeDuration,
-                                       delay: 0.0,
-                                       options: [UIViewAnimationOptions.CurveEaseIn,UIViewAnimationOptions.BeginFromCurrentState],
-                                       animations: { 
-                                        (existingActivityView as! UIView).alpha = 0.0
-                                        
-                }, completion: { (finished) in
-                    
-                    existingActivityView.removeFromSuperview()
-                    objc_setAssociatedObject(self, &activityViewKey, nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-                    self.userInteractionEnabled = true
+        if let existingActivityView = viewWithTag(activityViewTag) {
+            UIView.animate(withDuration: interval,
+                           delay: 0.0,
+                           options: [.curveEaseIn,.beginFromCurrentState],
+                           animations: {
+                            existingActivityView.alpha = 0.0
+            }, completion: { (finished) in
+                existingActivityView.removeFromSuperview()
+                self.isUserInteractionEnabled = true
             })
-            
         }
-        
-        
     }
     
     
 }
+
